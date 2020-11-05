@@ -1,5 +1,5 @@
 const { hash } = require('bcryptjs')
-const unlinkSync = require('fs')
+const fs = require('fs')
 
 const User = require('../models/User')
 const Product = require('../models/Product')
@@ -96,10 +96,10 @@ module.exports = {
             req.session.destroy()
 
             //remover as imagens da pasta public
-            promiseResults.map(results => {
-                results.rows.map(file => {
+            promiseResults.map(files => {
+                files.map(file => {
                     try {
-                        unlinkSync(file.path)
+                        fs.unlinkSync(file.path)
                     } catch (err) {
                         console.error(err)
                     }
