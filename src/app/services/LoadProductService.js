@@ -42,7 +42,7 @@ const LoadService = {
             const product = await Product.findOne(this.filter)
             return format(product)
         } catch (error) {
-            console.error(error);
+            console.error(error)
         }
     },
     async products(){
@@ -51,7 +51,7 @@ const LoadService = {
             const productsPromise = products.map(format)
             return Promise.all(productsPromise)
         } catch (error) {
-            console.error(error);
+            console.error(error)
         }
     },
     format,

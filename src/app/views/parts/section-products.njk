@@ -1,32 +1,29 @@
 {% macro products(name, classes, products) %}
+    <section class="shop {{classes}}">
 
+        {% if name %}
+            <h2>{{name}}</h2>
+        {% endif %}
 
+            <div class="items">
 
-<section class="shop {{classes}}">
+                {% for product in products %}
+                    <div class="product">
+                        <div 
+                            class="image" 
+                            style="background-image: url('{{product.img if product.img else '//placehold.it/500x500?text=Produto sem imagem'}}')">
+                        </div>
 
-    {% if name %}
-        <h2>{{name}}</h2>
-    {% endif %}
+                        {% if product.formattedOldPrice != product.formattedPrice %}
+                            <div class="old-price">{{product.formattedOldPrice}}</div>
+                        {% endif%}
+                        <p>{{product.formattedPrice}}</p>
+                        <h4>{{product.name}}</h4>
 
-        <div class="items">
+                        <a href="/products/{{product.id}}" class="button">Ver produto</a>
 
-            {% for product in products %}
-                <div class="product">
-                    <div 
-                        class="image" 
-                        style="background-image: url('{{product.img if product.img else '//placehold.it/500x500?text=Produto sem imagem'}}')">
                     </div>
-
-                    {% if product.formattedOldPrice != product.formattedPrice %}
-                        <div class="old-price">{{product.formattedOldPrice}}</div>
-                    {% endif%}
-                    <p>{{product.formattedPrice}}</p>
-                    <h4>{{product.name}}</h4>
-
-                    <a href="/products/{{product.id}}" class="button">Ver produto</a>
-
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
     </section>
 {% endmacro%}
