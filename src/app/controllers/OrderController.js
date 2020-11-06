@@ -4,7 +4,7 @@ const User = require('../models/User')
 const mailer = require('../../lib/mailer')
 
 
-const email = (seller, product) => `
+const email = (seller, product, buyer) => `
 <h2>Olá ${seller.name}</h2>
 <p>Voçê tem um novo pedido de compra do seu produto</p>
 <p>Produto: ${product.name}</p>
@@ -26,7 +26,7 @@ module.exports = {
     async post(req, res) {
         try {
             //pegar os dados do produto
-            const product = LoadProductService.load('product', { where: {
+            const product = await LoadProductService.load('product', { where: {
                 id: req.body.id
             }})
 

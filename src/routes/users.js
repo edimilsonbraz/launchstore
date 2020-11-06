@@ -34,6 +34,5 @@ routes.get('/ads', UserController.ads)
 routes.post('/orders', onlyUsers, OrderController.post)
 
 
-
 module.exports = routes
 
