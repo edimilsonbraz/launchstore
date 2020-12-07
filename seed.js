@@ -9,6 +9,7 @@ let usersIds = []
 let totalProducts = 10
 let totalUsers = 3
 
+
 async function createUsers() {
     const users = []
     const password = await hash('1111', 8)
