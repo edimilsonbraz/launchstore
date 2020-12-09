@@ -37,6 +37,7 @@ const Base = {
     },
     async findAll(filters) {
         const results = await find(filters, this.table )
+        
         return results.rows
     },
     async create(fields) { //User.create ({name: 'Mayk'})

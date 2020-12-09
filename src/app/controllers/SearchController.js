@@ -1,5 +1,5 @@
 const Product = require('../models/Product')
-const LoadProductsService = require('../services/LoadProductService')
+const { format } = require('../services/LoadProductService')
 
 
 module.exports = {
@@ -11,13 +11,12 @@ module.exports = {
 
             let products = await Product.search({ filter, category})
 
-            const productsPromise = products.map((product) =>
-            LoadProductsService.format(product))
+            const productsPromise = products.map(format)
 
             products = await Promise.all(productsPromise)
 
             const search = {
-                term: req.query.filter || "Toda a loja",
+                term: filter || "Toda a loja",
                 total: products.length
             }
 
