@@ -5,6 +5,8 @@ const Order = require('../models/Order')
 
 const Cart = require('../../lib/cart')
 const mailer = require('../../lib/mailer')
+const {formatPrice, date } = require('../../lib/utils')
+
 
 
 const email = (seller, product, buyer) => `
@@ -26,7 +28,53 @@ const email = (seller, product, buyer) => `
 `
 
 module.exports = {
-    async post(req, res) {
+    async index(req, res) {
+        //pegar os pedidos do usuário
+       let orders = await Order.findAll({where: {buyer_id: req.session.userId}})
+
+        const getOdersPromise = orders.map(async order => {
+            //detalhes do produto
+            order.product = await LoadProductService.load('products', {
+                where: { id: order.product_id }
+            })
+
+            //detalhes do comprador
+            order.buyer = await User.findOne({
+                where: { id: order.buyer_id }
+            })
+
+            //detalhes do vendedor
+            order.seller = await User.findOne({
+                where: { id: order.seller_id}
+            })
+
+            //formatação de preço
+            order.formattedPrice = formatPrice(order.price)
+            order.formattedTotal = formatPrice(order.total)
+
+            //formatação do status
+            const statuses = {
+                open: 'Aberto',
+                sold: 'Vendido',
+                canceled: 'Cancelado'
+            }
+
+            order.formattedStatus = statuses[order.status]
+
+            //formatação de atualizado em ...
+            const updatedAt = date(order.updated_at)
+            order.formattedUpdatedAt = `${order.formattedStatus} em 
+            ${updatedAt.day}/${updatedAt.month}/${updatedAt.year} às ${updatedAt.hour}h${updatedAt.minutes} `
+
+            return order
+        })
+
+        orders = await Promise.all(getOdersPromise)
+
+        return res.render('orders/index', { orders })
+
+    },
+    async post(req, res)  {
         try {
             //pegar os produtos do carrinho
             const cart = Cart.init(req.session.cart)
@@ -78,6 +126,10 @@ module.exports = {
             })
 
             await Promise.all(createOrdersPromise)
+
+            //Clear Cart
+            delete req.session.cart
+            Cart.init()
 
             //notificar o usuário com alguma mensagem de sucesso
             return res.render('orders/success')
