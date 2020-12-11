@@ -31,6 +31,8 @@ ul.dropdown {
 
     transition: all 200ms;
 
+    z-index: 1;
+
 }
 
 ul.dropdown li a, 
@@ -51,7 +53,7 @@ ul.dropdown li button {
 
 ul.dropdown li:hover,
 ul.dropdown li:hover button {
-    border-color: #eee;
+    background-color: #eee;
 }
 
 
