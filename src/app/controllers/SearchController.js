@@ -3,13 +3,13 @@ const { format } = require('../services/LoadProductService')
 
 
 module.exports = {
-    async index (req, res) {
-       try {
+    async index(req, res) {
+        try {
             let { filter, category } = req.query
 
-            if(!filter || filter.toLowerCase() == 'toda a loja') filter = null
+            if (!filter || filter.toLowerCase() == 'toda a loja') filter = null
 
-            let products = await Product.search({ filter, category})
+            let products = await Product.search({ filter, category })
 
             const productsPromise = products.map(format)
 
@@ -27,17 +27,17 @@ module.exports = {
 
                 const found = categoriesFiltered.some(cat => cat.id == category.id)
 
-                if(!found)
+                if (!found)
                     categoriesFiltered.push(category)
 
                 return categoriesFiltered
-            } , [])
+            }, [])
 
-                return res.render("search/index", { products, search, categories })
+            return res.render("search/index", { products, search, categories })
 
-       }catch (error) {
-           console.error (error)
-       }
+        } catch (error) {
+            console.error(error)
+        }
 
     }
 }

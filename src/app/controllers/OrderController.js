@@ -31,7 +31,7 @@ const email = (seller, product, buyer) => `
 module.exports = {
     async index(req, res) {
         const orders = await LoadOrderService.load('orders', {
-            where: { buyer_id: req.session.userId}
+            where: { buyer_id: req.session.userId }
         })
 
         return res.render('orders/index', { orders })
@@ -39,10 +39,10 @@ module.exports = {
     },
     async sales(req, res) {
         const sales = await LoadOrderService.load('orders', {
-            where: { seller_id: req.session.userId}
+            where: { seller_id: req.session.userId }
         })
 
-       
+
 
         return res.render('orders/sales', { sales })
 
@@ -52,26 +52,26 @@ module.exports = {
             where: { id: req.params.id }
         })
 
-        return res.render('orders/details', {order})
+        return res.render('orders/details', { order })
     },
-    async post(req, res)  {
+    async post(req, res) {
         try {
             //pegar os produtos do carrinho
             const cart = Cart.init(req.session.cart)
 
             const buyer_id = req.session.userId
-            
-            const filteredItems = cart.items.filter(item => 
+
+            const filteredItems = cart.items.filter(item =>
                 item.product.user_id != buyer_id
             )
 
             //criar o pedido
-            const createOrdersPromise = filteredItems.map(async item =>  {
-                let { product, price:total, quantity } = item
+            const createOrdersPromise = filteredItems.map(async item => {
+                let { product, price: total, quantity } = item
                 const { price, id: product_id, user_id: seller_id } = product
                 const status = "open"
 
-                const order = await Order.create( {
+                const order = await Order.create({
                     seller_id,
                     buyer_id,
                     product_id,
@@ -82,15 +82,17 @@ module.exports = {
                 })
 
                 //pegar os dados do produto
-                product = await LoadProductService.load('product', { where: {
-                    id: product_id
-                }})
+                product = await LoadProductService.load('product', {
+                    where: {
+                        id: product_id
+                    }
+                })
 
                 //os dados do vendedor
-                const seller = await User.findOne({where: {id: seller_id}})
+                const seller = await User.findOne({ where: { id: seller_id } })
 
                 //os dados do comprador
-                const buyer = await User.findOne({where: {id: buyer_id}})
+                const buyer = await User.findOne({ where: { id: buyer_id } })
 
                 //enviar email com dados da compra para o vendedor
                 await mailer.sendMail({
@@ -98,7 +100,7 @@ module.exports = {
                     from: 'no-reply@launchstore.com.br',
                     subject: 'Novo pedido de compra',
                     html: email(seller, product, buyer)
-                    
+
                 })
 
                 return order

@@ -10,7 +10,7 @@ module.exports = {
             // gerenciador de carrinho
             cart = Cart.init(cart)
 
-            return res.render('cart/index', {cart})
+            return res.render('cart/index', { cart })
 
         } catch (error) {
             console.error(error);
@@ -21,7 +21,7 @@ module.exports = {
         //pegar o id do produto e o produto
         const { id } = req.params
 
-        const product = await LoadProductsService.load('product', {where: { id }})
+        const product = await LoadProductsService.load('product', { where: { id } })
 
         //pegar o carrinho da sessão
         let { cart } = req.session
@@ -38,28 +38,28 @@ module.exports = {
     },
     removeOne(req, res) {
         // pegar o id do produto
-           let {id} = req.params
+        let { id } = req.params
 
         // pegar o carrinho da sessão
-            let {cart} = req.session
+        let { cart } = req.session
 
         // Se não tiver carrinho, retornar
-            if(!cart) return res.redirect('/cart')
+        if (!cart) return res.redirect('/cart')
 
         // iniciar o carrinho(gerenciador de carrinho) e remover
-            cart = Cart.init(cart).removeOne(id)
+        cart = Cart.init(cart).removeOne(id)
 
         // Atualizar os carrinho da sessão, removendo 1 item
-            req.session.cart = cart
+        req.session.cart = cart
 
         //redirecionamento para a pagina cart
-            return res.redirect('/cart')
+        return res.redirect('/cart')
     },
     delete(req, res) {
         let { id } = req.params
         let { cart } = req.session
 
-        if(!cart) return
+        if (!cart) return
 
         req.session.cart = Cart.init(cart).delete(id)
 

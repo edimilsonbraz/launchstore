@@ -20,7 +20,7 @@ module.exports = {
     },
     async post(req, res) {
         try {
-            
+
             let { category_id, name, description, old_price, price,
                 quantity, status } = req.body
 
@@ -74,7 +74,7 @@ module.exports = {
 
 
             return res.render("products/edit", { product, categories })
-            
+
         } catch (error) {
             console.error(error);
         }
@@ -133,12 +133,12 @@ module.exports = {
 
         //remover as imagens da pasta public
         files.map(file => {
-                try {
-                    fs.unlinkSync(file.path) 
-                } catch (err) {
-                    console.error(err)
-                }
-            })
+            try {
+                fs.unlinkSync(file.path)
+            } catch (err) {
+                console.error(err)
+            }
+        })
 
         return res.redirect('products/create')
     }
