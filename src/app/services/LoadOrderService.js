@@ -8,7 +8,7 @@ const { formatPrice, date } = require('../../lib/utils')
 
 async function format(order) {
     //detalhes do produto
-    order.product = await LoadProductService.load('product', {
+    order.product = await LoadProductService.load('productWithDeleted', {
         where: { id: order.product_id }
     })
 
@@ -63,7 +63,7 @@ const LoadService = {
         try {
             const orders = await Order.findAll(this.filter)
 
-            const ordersPromise = orders.map(format)
+            const ordersPromise = await orders.map(format)
 
             return Promise.all(ordersPromise)
 
@@ -71,7 +71,7 @@ const LoadService = {
             console.error(error)
         }
     },
-    format,
+    format
 }
 
 

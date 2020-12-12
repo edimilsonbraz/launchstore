@@ -7,8 +7,6 @@ const Order = require('../models/Order')
 
 const Cart = require('../../lib/cart')
 const mailer = require('../../lib/mailer')
-const { update } = require('../models/Order')
-const { sendMail } = require('../../lib/mailer')
 
 
 
